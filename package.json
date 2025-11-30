@@ -1,0 +1,12 @@
+{
+  "name": "playbox.purchases",
+  "displayName": "Playbox Purchases",
+  "version": "0.0.1",
+  "description": "In-App purchase system",
+  "keywords": [
+    "monetization",
+    "iap",
+    "purchase",
+  ],
+  "dependencies": {}
+}

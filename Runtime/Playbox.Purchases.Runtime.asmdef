@@ -1,0 +1,8 @@
+{
+  "name": "Playbox.Purchases.Runtime",
+  "rootNamespace": "Playbox.Purchases",
+  "references": [],
+  "includePlatforms": [],
+  "autoReferenced": true,
+  "allowUnsafeCode": false
+}

@@ -8,5 +8,7 @@
     "iap",
     "purchase"
   ],
-  "dependencies": {}
+  "dependencies": {
+    "com.unity.purchasing": "5.0.3"
+  }
 }

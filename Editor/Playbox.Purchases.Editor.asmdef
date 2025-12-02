@@ -1,0 +1,12 @@
+{
+  "name": "Playbox.Purchases.Editor",
+  "rootNamespace": "Playbox.Purchases",
+  "references": [
+    "Playbox.Purchases.Runtime"
+  ],
+  "includePlatforms": [
+    "Editor"
+  ],
+  "autoReferenced": true,
+  "allowUnsafeCode": false
+}

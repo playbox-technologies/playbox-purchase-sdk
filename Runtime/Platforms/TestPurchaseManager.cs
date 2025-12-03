@@ -2,16 +2,12 @@ using UnityEngine;
 
 namespace Playbox.Purchases
 {
-
     public class TestPurchaseManager : BasePurchaseManager
     {
         public override void Initialize()
         {
             base.Initialize();
             Debug.Log("TestPurchaseManager Initialized");
-
-            _products.Add(new Product("test_product_1", "Test Product 1", "Description for product 1", 0.0m, "USD"));
-            _products.Add(new Product("test_product_2", "Test Product 2", "Description for product 2", 0.0m, "USD"));
         }
 
         public override void Purchase(string productId)

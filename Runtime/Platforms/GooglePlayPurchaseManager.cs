@@ -2,7 +2,7 @@ using UnityEngine;
 
 namespace Playbox.Purchases
 {
-    public class GooglePlayPurchaseManager : BasePurchaseManager
+    public class GooglePlayPurchaseManager : PurchaseManager
     {
         public override void Initialize()
         {
@@ -10,16 +10,11 @@ namespace Playbox.Purchases
             Debug.Log("GooglePlayPurchaseManager Initialized");
         }
 
-        public override void Purchase(string productId)
+        // TODO: Implement platform-specific purchase logic here
+        protected override bool ProcessPlatformPurchase(IProduct product)
         {
-            var product = _products.Find(p => p.Id == productId);
-            if (product != null)
-            {
-                Debug.Log($"GooglePlayPurchaseManager: Purchase {productId} succeeded");
-                TriggerPurchaseSuccess(product);
-            }
-            else
-                TriggerPurchaseFailed(null, $"Product {productId} not found");
+            Debug.Log($"GooglePlayPurchaseManager: Processing purchase {product.Id}");
+            return true; 
         }
     }
 }

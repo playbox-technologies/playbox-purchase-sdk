@@ -2,7 +2,7 @@ using UnityEngine;
 
 namespace Playbox.Purchases
 {
-    public class TestPurchaseManager : BasePurchaseManager
+    public class TestPurchaseManager : PurchaseManager
     {
         public override void Initialize()
         {
@@ -10,18 +10,10 @@ namespace Playbox.Purchases
             Debug.Log("TestPurchaseManager Initialized");
         }
 
-        public override void Purchase(string productId)
+        protected override bool ProcessPlatformPurchase(IProduct product)
         {
-            var product = _products.Find(p => p.Id == productId);
-            if (product != null)
-            {
-                Debug.Log($"TestPurchaseManager: Purchase {productId} succeeded (simulation)");
-                TriggerPurchaseSuccess(product);
-            }
-            else
-            {
-                TriggerPurchaseFailed(null, $"Test product {productId} not found");
-            }
+            Debug.Log($"TestPurchaseManager: Simulating purchase of {product.Id}");
+            return true;
         }
     }
 }

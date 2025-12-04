@@ -41,6 +41,7 @@ public class PurchaseProductEditor : EditorWindow
             p.Description = EditorGUILayout.TextField("Description", p.Description);
             p.Price = EditorGUILayout.DoubleField("Price", p.Price);
             p.Currency = EditorGUILayout.TextField("Currency", p.Currency);
+            p.Type = (ProductType)EditorGUILayout.EnumPopup("Type", p.Type);
 
             if (GUILayout.Button("Remove"))
             {

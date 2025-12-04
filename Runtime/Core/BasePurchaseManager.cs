@@ -54,21 +54,5 @@ namespace Playbox.Purchases
             Debug.Log($"Loaded {_products.Count} products from JSON");
         }
     }
-
-    public class RuntimeProduct : IProduct
-    {
-        private ProductJson _def;
-
-        public RuntimeProduct(ProductJson def)
-        {
-            _def = def;
-        }
-
-        public string Id => _def.Id;
-        public string Name => _def.Name;
-        public string Description => _def.Description;
-        public decimal Price => (decimal)_def.Price;
-        public string Currency => _def.Currency;
-    }
 }
 

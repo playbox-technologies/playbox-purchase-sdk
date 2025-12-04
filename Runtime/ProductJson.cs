@@ -10,5 +10,6 @@ namespace Playbox.Purchases
         public string Description = "Description";
         public double Price = 0.99;
         public string Currency = "USD";
+        public ProductType Type;
     }
 }

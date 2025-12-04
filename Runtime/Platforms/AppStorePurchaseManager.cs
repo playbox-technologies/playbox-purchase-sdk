@@ -8,9 +8,6 @@ namespace Playbox.Purchases
         {
             base.Initialize();
             Debug.Log("AppStorePurchaseManager Initialized");
-
-            _products.Add(new Product("coin_pack_1", "100 Coins", "Pack of 100 coins", 0.99m, "USD"));
-            _products.Add(new Product("coin_pack_2", "500 Coins", "Pack of 500 coins", 3.99m, "USD"));
         }
 
         public override void Purchase(string productId)

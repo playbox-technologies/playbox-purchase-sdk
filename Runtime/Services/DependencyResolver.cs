@@ -9,9 +9,9 @@ namespace Playbox.Purchases
 #if UNITY_ANDROID
             _purchaseManager = new GooglePlayPurchaseManager();
 #elif UNITY_IOS
-            _purchaseManager = new AppStorePurchaseManager();
+            //_purchaseManager = new AppStorePurchaseManager();
 #else
-            _purchaseManager = new TestPurchaseManager();
+           // _purchaseManager = new TestPurchaseManager();
 #endif
             _purchaseManager.Initialize();
         }

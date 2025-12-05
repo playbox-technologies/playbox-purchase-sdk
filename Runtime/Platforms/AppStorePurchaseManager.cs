@@ -2,7 +2,7 @@ using UnityEngine;
 
 namespace Playbox.Purchases
 {
-    public class AppStorePurchaseManager : PurchaseManager
+   /* public class AppStorePurchaseManager : PurchaseManager
     {
         public override void Initialize()
         {
@@ -16,5 +16,5 @@ namespace Playbox.Purchases
             Debug.Log($"AppStorePurchaseManager: Processing purchase {product.Id}");
             return true;
         }
-    }
+    }*/
 }

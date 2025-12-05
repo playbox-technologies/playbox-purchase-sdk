@@ -1,7 +1,10 @@
 {
   "name": "Playbox.Purchases.Runtime",
   "rootNamespace": "Playbox.Purchases",
-  "references": [],
+  "references": [
+	  "UnityEngine.Purchasing",
+      "UnityEngine.Purchasing.Stores"
+  ],
   "includePlatforms": [],
   "autoReferenced": true,
   "allowUnsafeCode": false

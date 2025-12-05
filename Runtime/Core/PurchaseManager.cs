@@ -22,7 +22,7 @@ namespace Playbox.Purchases
 
         public virtual IProduct[] GetProducts() => _products.ToArray();
 
-        protected abstract bool ProcessPlatformPurchase(IProduct product);
+        protected abstract void ProcessPlatformPurchase(IProduct product);
 
         public void Purchase(string productId)
         {
@@ -39,21 +39,7 @@ namespace Playbox.Purchases
                 return;
             }
 
-            bool success = ProcessPlatformPurchase(product);
-
-            if (success)
-            {
-                if (product.Type == ProductType.NonConsumable)
-                    SaveNonConsumable(productId);
-                else if (product.Type == ProductType.Consumable)
-                    AddConsumable(productId, 1);
-
-                TriggerPurchaseSuccess(product);
-            }
-            else
-            {
-                TriggerPurchaseFailed(product, "Purchase failed");
-            }
+            ProcessPlatformPurchase(product);
         }
 
         public event System.Action<IProduct> OnPurchaseSuccess;
@@ -88,7 +74,7 @@ namespace Playbox.Purchases
             Debug.Log($"Loaded {_products.Count} products from JSON");
         }
 
-        private void SaveNonConsumable(string productId)
+        protected void SaveNonConsumable(string productId)
         {
             var purchases = LoadNonConsumables();
             if (!purchases.Contains(productId))

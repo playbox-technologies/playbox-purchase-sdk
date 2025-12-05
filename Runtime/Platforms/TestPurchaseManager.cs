@@ -2,7 +2,7 @@ using UnityEngine;
 
 namespace Playbox.Purchases
 {
-    public class TestPurchaseManager : PurchaseManager
+    /*public class TestPurchaseManager : PurchaseManager
     {
         public override void Initialize()
         {
@@ -15,5 +15,5 @@ namespace Playbox.Purchases
             Debug.Log($"TestPurchaseManager: Simulating purchase of {product.Id}");
             return true;
         }
-    }
+    }*/
 }

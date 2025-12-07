@@ -3,7 +3,12 @@
   "rootNamespace": "Playbox.Purchases",
   "references": [
 	  "UnityEngine.Purchasing",
-      "UnityEngine.Purchasing.Stores"
+      "UnityEngine.Purchasing.Stores",
+	  "Unity.Services.Core",
+	  "Purchasing.Common",
+      "Unity.Services.Core.Environments",
+      "Unity.Services.Core.Internal",
+      "Unity.Services.Analytics"
   ],
   "includePlatforms": [],
   "autoReferenced": true,

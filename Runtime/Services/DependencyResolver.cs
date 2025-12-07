@@ -11,7 +11,7 @@ namespace Playbox.Purchases
 #elif UNITY_IOS
             //_purchaseManager = new AppStorePurchaseManager();
 #else
-           // _purchaseManager = new TestPurchaseManager();
+             _purchaseManager = new GooglePlayPurchaseManager();
 #endif
             _purchaseManager.Initialize();
         }

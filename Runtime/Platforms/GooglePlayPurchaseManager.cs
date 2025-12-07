@@ -1,6 +1,7 @@
 using System.Linq;
 using UnityEngine;
 using UnityEngine.Purchasing;
+using Unity.Services.Core;
 
 namespace Playbox.Purchases
 {
@@ -12,6 +13,7 @@ namespace Playbox.Purchases
         public override void Initialize()
         {
             base.Initialize();
+            InitializAsync();
             Debug.Log("GooglePlayPurchaseManager: Initialize started");
 
             var module = StandardPurchasingModule.Instance();
@@ -28,6 +30,19 @@ namespace Playbox.Purchases
             }
 
             UnityPurchasing.Initialize(this, builder);
+        }
+
+        private async void InitializAsync()
+        {
+            try
+            {
+                await UnityServices.InitializeAsync();
+                Debug.Log("UGS initialized");
+            }
+            catch (System.Exception e)
+            {
+                Debug.LogError($"Failed to initialize UGS: {e}");
+            }
         }
 
         protected override void ProcessPlatformPurchase(IProduct product)

@@ -13,48 +13,52 @@ namespace Playbox.Purchases
         public override void Initialize()
         {
             base.Initialize();
-            InitializAsync();
-            Debug.Log("GooglePlayPurchaseManager: Initialize started");
-
-            var module = StandardPurchasingModule.Instance();
-
-            var builder = ConfigurationBuilder.Instance(module);
-
-            foreach (var p in _products)
-            {
-                var unityType = p.Type == ProductType.NonConsumable
-                    ? UnityEngine.Purchasing.ProductType.NonConsumable
-                    : UnityEngine.Purchasing.ProductType.Consumable;
-
-                builder.AddProduct(p.Id, unityType);
-            }
-
-            UnityPurchasing.Initialize(this, builder);
+            Debug.Log("[IAP] GooglePlayPurchaseManager.Initialize()");
+            InitializeIapAsync();
         }
 
-        private async void InitializAsync()
+        private async void InitializeIapAsync()
         {
             try
             {
+                Debug.Log("[IAP] UnityServices.InitializeAsync()...");
                 await UnityServices.InitializeAsync();
-                Debug.Log("UGS initialized");
+                Debug.Log("[IAP] UGS initialized OK");
+
+                var module = StandardPurchasingModule.Instance();
+                var builder = ConfigurationBuilder.Instance(module);
+
+                foreach (var p in _products)
+                {
+                    var unityType = p.Type == ProductType.NonConsumable
+                        ? UnityEngine.Purchasing.ProductType.NonConsumable
+                        : UnityEngine.Purchasing.ProductType.Consumable;
+
+                    Debug.Log($"[IAP] AddProduct: {p.Id}, type={p.Type}");
+                    builder.AddProduct(p.Id, unityType);
+                }
+
+                Debug.Log("[IAP] UnityPurchasing.Initialize()...");
+                UnityPurchasing.Initialize(this, builder);
             }
             catch (System.Exception e)
             {
-                Debug.LogError($"Failed to initialize UGS: {e}");
+                Debug.LogError($"[IAP] Failed to initialize UGS/IAP: {e}");
             }
         }
 
         protected override void ProcessPlatformPurchase(IProduct product)
         {
+            Debug.Log($"[IAP] ProcessPlatformPurchase: {product?.Id}");
+
             if (_controller == null)
             {
-                Debug.LogWarning("GooglePlayPurchaseManager: IAP not initialized");
+                Debug.LogWarning("[IAP] IAP not initialized (_controller == null)");
                 TriggerPurchaseFailed(product, "IAP not initialized");
                 return;
             }
 
-            Debug.Log($"GooglePlayPurchaseManager: Initiate purchase {product.Id}");
+            Debug.Log($"[IAP] InitiatePurchase: {product.Id}");
             _controller.InitiatePurchase(product.Id);
         }
 
@@ -62,36 +66,45 @@ namespace Playbox.Purchases
         {
             _controller = controller;
             _extensions = extensions;
-            Debug.Log("GooglePlayPurchaseManager: IAP initialized");
+            Debug.Log("[IAP] OnInitialized: IAP initialized OK");
         }
 
         public void OnInitializeFailed(InitializationFailureReason error)
         {
-            Debug.LogError($"GooglePlayPurchaseManager: IAP init failed: {error}");
+            Debug.LogError($"[IAP] OnInitializeFailed: {error}");
         }
 
-#if UNITY_2019_1_OR_NEWER
         public void OnInitializeFailed(InitializationFailureReason error, string message)
         {
-            Debug.LogError($"GooglePlayPurchaseManager: IAP init failed: {error} - {message}");
+            Debug.LogError($"[IAP] OnInitializeFailed: {error} - {message}");
         }
-#endif
 
         public PurchaseProcessingResult ProcessPurchase(PurchaseEventArgs args)
         {
             var unityProduct = args.purchasedProduct;
+            Debug.Log($"[IAP] ProcessPurchase: {unityProduct.definition.id}");
 
             var product = _products.FirstOrDefault(p => p.Id == unityProduct.definition.id);
             if (product == null)
             {
-                Debug.LogWarning($"GooglePlayPurchaseManager: Unknown product {unityProduct.definition.id}");
+                Debug.LogWarning($"[IAP] Unknown product: {unityProduct.definition.id}");
                 return PurchaseProcessingResult.Complete;
             }
 
+            Debug.Log($"[IAP] Recognized product: {product.Id}, type={product.Type}");
+
             if (product.Type == ProductType.NonConsumable)
+            {
+                Debug.Log($"[IAP] SaveNonConsumable({product.Id})");
                 SaveNonConsumable(product.Id);
+            }
             else if (product.Type == ProductType.Consumable)
+            {
+                Debug.Log($"[IAP] AddConsumable({product.Id}, 1)");
                 AddConsumable(product.Id, 1);
+            }
+
+            Debug.Log($"[IAP] Purchase SUCCESS: {product.Id}");
             TriggerPurchaseSuccess(product);
 
             return PurchaseProcessingResult.Complete;
@@ -99,6 +112,8 @@ namespace Playbox.Purchases
 
         public void OnPurchaseFailed(UnityEngine.Purchasing.Product unityProduct, PurchaseFailureReason failureReason)
         {
+            Debug.LogWarning($"[IAP] OnPurchaseFailed: {unityProduct.definition.id}, reason={failureReason}");
+
             var product = _products.FirstOrDefault(p => p.Id == unityProduct.definition.id);
             TriggerPurchaseFailed(product, failureReason.ToString());
         }

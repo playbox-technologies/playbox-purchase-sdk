@@ -13,8 +13,18 @@ namespace Playbox.Purchases
 
         private const string NonConsumablesKey = "NonConsumablePurchases";
 
+        private bool _isInitialized = false;
+
         public virtual void Initialize()
         {
+            if (_isInitialized)
+            {
+                Debug.LogWarning("[IAP] Initialize was already called.");
+                return;
+            }
+
+            _isInitialized = true;
+
             LoadProductsFromJSON();
         }
 

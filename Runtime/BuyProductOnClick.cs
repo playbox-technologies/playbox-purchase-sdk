@@ -19,7 +19,6 @@ public class PurchaseExample : MonoBehaviour
 
     private void Start()
     {
-        _purchaseManager.Initialize();
         if (_purchaseManager == null)
         {
             Debug.LogError("PurchaseExample: IPurchaseManager is null. Check DependencyResolver.");
@@ -47,13 +46,6 @@ public class PurchaseExample : MonoBehaviour
         _purchaseManager.Purchase(_productId);
     }
 
-    private void HandlePurchaseSuccess(IProduct product)
-    {
-        Debug.Log($"Purchase successful: {product.Id}");
-    }
-
-    private void HandlePurchaseFailed(IProduct product, string reason)
-    {
-        Debug.Log($"Purchase failed for product {product?.Id}. Reason: {reason}");
-    }
+    private void HandlePurchaseSuccess(IProduct product) => Debug.Log($"Purchase successful: {product.Id}");
+    private void HandlePurchaseFailed(IProduct product, string reason) => Debug.Log($"Purchase failed for product {product?.Id}. Reason: {reason}");
 }

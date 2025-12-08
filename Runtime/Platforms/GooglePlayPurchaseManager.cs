@@ -110,7 +110,7 @@ namespace Playbox.Purchases
             return PurchaseProcessingResult.Complete;
         }
 
-        public void OnPurchaseFailed(UnityEngine.Purchasing.Product unityProduct, PurchaseFailureReason failureReason)
+        new public void OnPurchaseFailed(UnityEngine.Purchasing.Product unityProduct, PurchaseFailureReason failureReason)
         {
             Debug.LogWarning($"[IAP] OnPurchaseFailed: {unityProduct.definition.id}, reason={failureReason}");
 

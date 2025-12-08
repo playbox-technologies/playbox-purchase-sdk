@@ -1,7 +1,7 @@
+using System;
 using System.Collections.Generic;
-using System.IO;
-using UnityEngine;
 using Newtonsoft.Json;
+using UnityEngine;
 
 namespace Playbox.Purchases
 {
@@ -9,9 +9,7 @@ namespace Playbox.Purchases
     {
         protected List<IProduct> _products = new List<IProduct>();
 
-        private const string FolderPath = "Assets/Playbox/PurchaseProduct";
-        private const string FileName = "Products.json";
-        private string _filePath => Path.Combine(FolderPath, FileName);
+        private const string ProductsResourcesPath = "IAP/Products";
 
         private const string NonConsumablesKey = "NonConsumablePurchases";
 
@@ -42,36 +40,50 @@ namespace Playbox.Purchases
             ProcessPlatformPurchase(product);
         }
 
-        public event System.Action<IProduct> OnPurchaseSuccess;
-        public event System.Action<IProduct, string> OnPurchaseFailed;
+        public event Action<IProduct> OnPurchaseSuccess;
+        public event Action<IProduct, string> OnPurchaseFailed;
 
-        protected void TriggerPurchaseSuccess(IProduct product) => OnPurchaseSuccess?.Invoke(product);
-        protected void TriggerPurchaseFailed(IProduct product, string reason) => OnPurchaseFailed?.Invoke(product, reason);
+        protected void TriggerPurchaseSuccess(IProduct product) =>
+            OnPurchaseSuccess?.Invoke(product);
+
+        protected void TriggerPurchaseFailed(IProduct product, string reason) =>
+            OnPurchaseFailed?.Invoke(product, reason);
 
         private void LoadProductsFromJSON()
         {
-            if (!Directory.Exists(FolderPath))
+            try
             {
-                Directory.CreateDirectory(FolderPath);
-                Debug.Log($"Purchase folder created at {FolderPath}");
-            }
+                var textAsset = Resources.Load<TextAsset>(ProductsResourcesPath);
+                if (textAsset == null)
+                {
+                    Debug.LogWarning($"[IAP] Products.json not found in Resources at path '{ProductsResourcesPath}'");
+                    return;
+                }
 
-            if (!File.Exists(_filePath))
+                string json = textAsset.text;
+                var defs = JsonConvert.DeserializeObject<List<ProductJson>>(json);
+
+                if (defs == null)
+                {
+                    Debug.LogError("[IAP] Failed to deserialize products.json: defs == null");
+                    return;
+                }
+
+                _products.Clear();
+                foreach (var def in defs)
+                {
+                    if (def == null)
+                        continue;
+
+                    _products.Add(new RuntimeProduct(def));
+                }
+
+                Debug.Log($"[IAP] Loaded {_products.Count} products from JSON (Resources)");
+            }
+            catch (Exception e)
             {
-                Debug.LogWarning($"Products.json not found at {_filePath}");
-                return;
+                Debug.LogError("[IAP] Exception in LoadProductsFromJSON: " + e);
             }
-
-            string json = File.ReadAllText(_filePath);
-            var defs = JsonConvert.DeserializeObject<List<ProductJson>>(json);
-
-            _products.Clear();
-            foreach (var def in defs)
-            {
-                _products.Add(new RuntimeProduct(def));
-            }
-
-            Debug.Log($"Loaded {_products.Count} products from JSON");
         }
 
         protected void SaveNonConsumable(string productId)
@@ -93,12 +105,11 @@ namespace Playbox.Purchases
             return JsonConvert.DeserializeObject<List<string>>(PlayerPrefs.GetString(NonConsumablesKey));
         }
 
-        private bool IsAlreadyPurchased(string productId) => LoadNonConsumables().Contains(productId);
+        private bool IsAlreadyPurchased(string productId) =>
+            LoadNonConsumables().Contains(productId);
 
-        public bool IsProductPurchased(string productId)
-        {
-            return IsAlreadyPurchased(productId);
-        }
+        public bool IsProductPurchased(string productId) =>
+            IsAlreadyPurchased(productId);
 
         protected void AddConsumable(string productId, int amount)
         {
@@ -107,9 +118,7 @@ namespace Playbox.Purchases
             PlayerPrefs.Save();
         }
 
-        public int GetConsumableAmount(string productId)
-        {
-            return PlayerPrefs.GetInt(productId, 0);
-        }
+        public int GetConsumableAmount(string productId) =>
+            PlayerPrefs.GetInt(productId, 0);
     }
 }

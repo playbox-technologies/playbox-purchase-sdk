@@ -15,11 +15,7 @@ public class PurchaseProductEditor : EditorWindow
     private Vector2 _scrollPos;
 
     [MenuItem("Playbox/Purchase Products Editor")]
-    public static void OpenWindow()
-    {
-        GetWindow<PurchaseProductEditor>("Purchase Products");
-    }
-
+    public static void OpenWindow() => GetWindow<PurchaseProductEditor>("Purchase Products");
     private void OnEnable() => LoadProducts();
 
     private void OnGUI()

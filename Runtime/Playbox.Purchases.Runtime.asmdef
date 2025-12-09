@@ -2,8 +2,8 @@
   "name": "Playbox.Purchases.Runtime",
   "rootNamespace": "Playbox.Purchases",
   "references": [
-	  "UnityEngine.Purchasing",
-      "UnityEngine.Purchasing.Stores",
+	  "Unity.Purchasing",
+      "Unity.Purchasing.Stores",
 	  "Unity.Services.Core",
 	  "Purchasing.Common",
       "Unity.Services.Core.Environments",

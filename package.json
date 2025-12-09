@@ -1,15 +1,15 @@
 {
   "name": "playbox.purchases",
   "displayName": "Playbox Purchases",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "In-App purchase system",
   "keywords": [
     "monetization",
     "iap",
     "purchase"
   ],
- "dependencies": {
+  "dependencies": {
     "com.unity.nuget.newtonsoft-json": "3.2.1",
-    "com.unity.purchasing" : "5.0.4"
+    "com.unity.purchasing": "5.0.4"
   }
 }

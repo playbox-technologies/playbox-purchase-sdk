@@ -7,7 +7,7 @@ using UnityEngine;
 
 public class PurchaseProductEditor : EditorWindow
 {
-    private const string FolderPath = "Assets/Resources/IAP";
+    private const string FolderPath = "Assets/Resources/Playbox/IAP";
     private const string FileName = "Products.json";
     private string _filePath => Path.Combine(FolderPath, FileName);
 

@@ -9,7 +9,7 @@ namespace Playbox.Purchases
     {
         protected List<IProduct> _products = new List<IProduct>();
 
-        private const string ProductsResourcesPath = "IAP/Products";
+        private const string ProductsResourcesPath = "Playbox/IAP/Products";
 
         private const string NonConsumablesKey = "NonConsumablePurchases";
 

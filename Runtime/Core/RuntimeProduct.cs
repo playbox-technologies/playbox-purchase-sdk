@@ -10,6 +10,7 @@ namespace Playbox.Purchases
         public string Description => _def.Description;
         public decimal Price => (decimal)_def.Price;
         public string Currency => _def.Currency;
+        public int Amount => _def.Amount;
         public ProductType Type => _def.Type;
     }
 }

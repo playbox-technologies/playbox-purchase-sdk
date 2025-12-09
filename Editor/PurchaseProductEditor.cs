@@ -1,4 +1,4 @@
-using Newtonsoft.Json;
+﻿using Newtonsoft.Json;
 using Playbox.Purchases;
 using System.Collections.Generic;
 using System.IO;
@@ -37,6 +37,7 @@ public class PurchaseProductEditor : EditorWindow
             p.Description = EditorGUILayout.TextField("Description", p.Description);
             p.Price = EditorGUILayout.DoubleField("Price", p.Price);
             p.Currency = EditorGUILayout.TextField("Currency", p.Currency);
+            p.Amount = EditorGUILayout.IntField("Amount", p.Amount);
             p.Type = (ProductType)EditorGUILayout.EnumPopup("Type", p.Type);
 
             if (GUILayout.Button("Remove"))

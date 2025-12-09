@@ -7,7 +7,8 @@ namespace Playbox.Purchases
         string Description { get; }
         decimal Price { get; }
         string Currency { get; }
-
+        int Amount { get; }
         ProductType Type { get; }
+
     }
 }

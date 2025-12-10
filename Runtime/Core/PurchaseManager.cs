@@ -5,11 +5,11 @@ using UnityEngine;
 
 namespace Playbox.Purchases
 {
-    public abstract class PurchaseManager : IPurchaseManager
+    public abstract class PurchaseManager
     {
         protected List<IProduct> _products = new List<IProduct>();
 
-        private const string ProductsResourcesPath = "IAP/Products";
+        private const string ProductsResourcesPath = "Playbox/IAP/Products";
 
         private const string NonConsumablesKey = "NonConsumablePurchases";
 
@@ -48,6 +48,16 @@ namespace Playbox.Purchases
             }
 
             ProcessPlatformPurchase(product);
+        }
+
+        public ProductType GetProductType(string productId)
+        {
+            var product = _products.Find(p => p.Id == productId);
+            if (product != null)
+            {
+                return product.Type;
+            }
+            return ProductType.Consumable;
         }
 
         public event Action<IProduct> OnPurchaseSuccess;
@@ -115,20 +125,10 @@ namespace Playbox.Purchases
             return JsonConvert.DeserializeObject<List<string>>(PlayerPrefs.GetString(NonConsumablesKey));
         }
 
-        private bool IsAlreadyPurchased(string productId) =>
+        public bool IsAlreadyPurchased(string productId) =>
             LoadNonConsumables().Contains(productId);
 
         public bool IsProductPurchased(string productId) =>
             IsAlreadyPurchased(productId);
-
-        protected void AddConsumable(string productId, int amount)
-        {
-            int current = PlayerPrefs.GetInt(productId, 0);
-            PlayerPrefs.SetInt(productId, current + amount);
-            PlayerPrefs.Save();
-        }
-
-        public int GetConsumableAmount(string productId) =>
-            PlayerPrefs.GetInt(productId, 0);
     }
 }

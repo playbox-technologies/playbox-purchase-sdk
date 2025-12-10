@@ -1,4 +1,4 @@
-using Newtonsoft.Json;
+﻿using Newtonsoft.Json;
 using Playbox.Purchases;
 using System.Collections.Generic;
 using System.IO;
@@ -7,7 +7,7 @@ using UnityEngine;
 
 public class PurchaseProductEditor : EditorWindow
 {
-    private const string FolderPath = "Assets/Resources/IAP";
+    private const string FolderPath = "Assets/Resources/Playbox/IAP";
     private const string FileName = "Products.json";
     private string _filePath => Path.Combine(FolderPath, FileName);
 
@@ -15,11 +15,7 @@ public class PurchaseProductEditor : EditorWindow
     private Vector2 _scrollPos;
 
     [MenuItem("Playbox/Purchase Products Editor")]
-    public static void OpenWindow()
-    {
-        GetWindow<PurchaseProductEditor>("Purchase Products");
-    }
-
+    public static void OpenWindow() => GetWindow<PurchaseProductEditor>("Purchase Products");
     private void OnEnable() => LoadProducts();
 
     private void OnGUI()
@@ -41,6 +37,7 @@ public class PurchaseProductEditor : EditorWindow
             p.Description = EditorGUILayout.TextField("Description", p.Description);
             p.Price = EditorGUILayout.DoubleField("Price", p.Price);
             p.Currency = EditorGUILayout.TextField("Currency", p.Currency);
+            p.Amount = EditorGUILayout.IntField("Amount", p.Amount);
             p.Type = (ProductType)EditorGUILayout.EnumPopup("Type", p.Type);
 
             if (GUILayout.Button("Remove"))

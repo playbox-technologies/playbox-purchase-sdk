@@ -1,5 +1,3 @@
-using UnityEngine;
-
 namespace Playbox.Purchases
 {
     [System.Serializable]
@@ -10,6 +8,7 @@ namespace Playbox.Purchases
         public string Description = "Description";
         public double Price = 0.99;
         public string Currency = "USD";
+        public int Amount = 1;
         public ProductType Type;
     }
 }

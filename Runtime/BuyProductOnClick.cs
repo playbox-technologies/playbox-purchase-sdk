@@ -42,7 +42,8 @@ public class PurchaseExample : MonoBehaviour
     {
         if (_purchaseManager.IsAlreadyPurchased(_productId))
         {
-            _purchaseButton.gameObject.SetActive(false);
+            //I put it away for the duration of the tests
+            // _purchaseButton.gameObject.SetActive(false);
             return;
         }
     }

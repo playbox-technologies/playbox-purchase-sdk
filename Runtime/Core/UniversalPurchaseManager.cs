@@ -14,7 +14,7 @@ namespace Playbox.Purchases
         public override void Initialize()
         {
             base.Initialize();              
-            Debug.Log("[IAP] GooglePlayPurchaseManager.Initialize()");
+            Debug.Log("[IAP] PurchaseManager.Initialize()");
             InitializeIapAsync();
         }
 
@@ -152,6 +152,24 @@ namespace Playbox.Purchases
         {
             var id = order.CartOrdered.Items().FirstOrDefault()?.Product.definition.id;
             Debug.Log($"[IAP] OnPurchaseConfirmed: {id}");
+        }
+
+        public void RestorePurchases()
+        {
+            if (Application.platform == RuntimePlatform.IPhonePlayer)
+            {
+                _storeController.RestoreTransactions((success, error) =>
+                {
+                    if (success)
+                    {
+                        Debug.Log("[IAP] Successfully restored transactions.");
+                    }
+                    else
+                    {
+                        Debug.LogWarning("[IAP] Failed to restore transactions. Error: " + error);
+                    }
+                });
+            }
         }
 
         private void OnPurchasesFailed(FailedOrder order)

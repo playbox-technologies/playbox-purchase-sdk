@@ -15,8 +15,6 @@ namespace Playbox.Purchases
 
         private bool _isInitialized = false;
 
-        protected bool _isPlayboxDetected = false;
-
         public virtual void Initialize()
         {
             if (_isInitialized)
@@ -26,11 +24,6 @@ namespace Playbox.Purchases
             }
 
             _isInitialized = true;
-
-            if (PlayboxDetector.IsPlayboxInstalled())
-                _isPlayboxDetected = true;
-            else
-                _isPlayboxDetected = false;
 
             LoadProductsFromJSON();
         }

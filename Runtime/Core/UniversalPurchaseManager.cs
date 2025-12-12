@@ -141,21 +141,20 @@ namespace Playbox.Purchases
                 return;
             }
 
-            if (_isPlayboxDetected)
+#if PLAYBOX_SDK
+            var unityProduct = item.Product;
+
+            var adapter = new ProductDataAdapter
             {
-                var unityProduct = item.Product;
+                TransactionId = unityProduct.transactionID,
+                DefinitionId = unityProduct.definition.id,
+                MetadataLocalizedPrice = unityProduct.metadata.localizedPrice,
+                MetadataIsoCurrencyCode = unityProduct.metadata.isoCurrencyCode,
+                Receipt = unityProduct.receipt
+            };
 
-                var adapter = new ProductDataAdapter
-                {
-                    TransactionId = unityProduct.transactionID,
-                    DefinitionId = unityProduct.definition.id,
-                    MetadataLocalizedPrice = unityProduct.metadata.localizedPrice,
-                    MetadataIsoCurrencyCode = unityProduct.metadata.isoCurrencyCode,
-                    Receipt = unityProduct.receipt
-                };
-
-                Analytics.LogPurchase(adapter, isValid => { });
-            }
+            Analytics.LogPurchase(adapter, isValid => { });
+#endif
 
 
             if (product.Type == ProductType.NonConsumable)
@@ -210,16 +209,15 @@ namespace Playbox.Purchases
                 return;
             }
 
-            if (_isPlayboxDetected)
+#if PLAYBOX_SDK
+            var adapter = new ProductDataAdapter
             {
-                var adapter = new ProductDataAdapter
-                {
-                    DefinitionId = product.Id
-                };
+                DefinitionId = product.Id
+            };
 
 
-                Analytics.LogPurshaseInitiation(adapter);
-            }
+            Analytics.LogPurshaseInitiation(adapter);
+#endif
 
             _storeController.PurchaseProduct(product.Id);
         }

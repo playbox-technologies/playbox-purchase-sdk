@@ -1,16 +1,29 @@
 {
-  "name": "Playbox.Purchases.Runtime",
-  "rootNamespace": "Playbox.Purchases",
-  "references": [
-	  "Unity.Purchasing",
-      "Unity.Purchasing.Stores",
-	  "Unity.Services.Core",
-	  "Purchasing.Common",
-      "Unity.Services.Core.Environments",
-      "Unity.Services.Core.Internal",
-      "Unity.Services.Analytics"
-  ],
-  "includePlatforms": [],
-  "autoReferenced": true,
-  "allowUnsafeCode": false
+    "name": "Playbox.Purchases.Runtime",
+    "rootNamespace": "Playbox.Purchases",
+    "references": [
+        "Unity.Purchasing",
+        "Unity.Purchasing.Stores",
+        "Unity.Services.Core",
+        "Purchasing.Common",
+        "Unity.Services.Core.Environments",
+        "Unity.Services.Core.Internal",
+        "Unity.Services.Analytics",
+        "Playbox"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [
+        {
+            "name": "playbox",
+            "expression": "",
+            "define": "PLAYBOX_SDK"
+        }
+    ],
+    "noEngineReferences": false
 }

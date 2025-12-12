@@ -1,9 +1,9 @@
-﻿using System.Linq;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
+using Unity.Services.Core;
 using UnityEngine;
 using UnityEngine.Purchasing;
-using Unity.Services.Core;
 
 namespace Playbox.Purchases
 {
@@ -140,6 +140,22 @@ namespace Playbox.Purchases
                 return;
             }
 
+#if PLAYBOX_SDK
+            var unityProduct = item.Product;
+
+            var adapter = new ProductDataAdapter
+            {
+                TransactionId = unityProduct.transactionID,
+                DefinitionId = unityProduct.definition.id,
+                MetadataLocalizedPrice = unityProduct.metadata.localizedPrice,
+                MetadataIsoCurrencyCode = unityProduct.metadata.isoCurrencyCode,
+                Receipt = unityProduct.receipt
+            };
+
+            Analytics.LogPurchase(adapter, isValid => { });
+#endif
+
+
             if (product.Type == ProductType.NonConsumable)
                 SaveNonConsumable(id);
 
@@ -191,6 +207,16 @@ namespace Playbox.Purchases
                 TriggerPurchaseFailed(product, "IAP not initialized");
                 return;
             }
+
+#if PLAYBOX_SDK
+            var adapter = new ProductDataAdapter
+            {
+                DefinitionId = product.Id
+            };
+
+
+            Analytics.LogPurshaseInitiation(adapter);
+#endif
 
             _storeController.PurchaseProduct(product.Id);
         }

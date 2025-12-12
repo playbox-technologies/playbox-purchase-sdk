@@ -3,7 +3,6 @@ using System.Linq;
 using System.Threading.Tasks;
 using Unity.Services.Core;
 using UnityEngine;
-using UnityEngine.Analytics;
 using UnityEngine.Purchasing;
 
 namespace Playbox.Purchases

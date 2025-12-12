@@ -8,7 +8,8 @@
 	  "Purchasing.Common",
       "Unity.Services.Core.Environments",
       "Unity.Services.Core.Internal",
-      "Unity.Services.Analytics"
+      "Unity.Services.Analytics",
+	  "Playbox"
   ],
   "includePlatforms": [],
   "autoReferenced": true,

@@ -15,7 +15,7 @@ namespace Playbox.Purchases
 
         private bool _isInitialized = false;
 
-        private bool _isPlayboxDetected = false;
+        protected bool _isPlayboxDetected = false;
 
         public virtual void Initialize()
         {

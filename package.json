@@ -1,7 +1,7 @@
 {
   "name": "playbox.purchases",
   "displayName": "Playbox Purchases",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "In-App purchase system",
   "keywords": [
     "monetization",

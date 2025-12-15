@@ -14,8 +14,11 @@ public class PurchaseProductEditor : EditorWindow
     private List<ProductJson> _products = new List<ProductJson>();
     private Vector2 _scrollPos;
 
+    private bool _isDirty = false; 
+
     [MenuItem("Playbox/Purchase Products Editor")]
     public static void OpenWindow() => GetWindow<PurchaseProductEditor>("Purchase Products");
+
     private void OnEnable() => LoadProducts();
 
     private void OnGUI()
@@ -44,6 +47,7 @@ public class PurchaseProductEditor : EditorWindow
             {
                 _products.RemoveAt(i);
                 i--;
+                _isDirty = true;
             }
 
             EditorGUILayout.EndVertical();
@@ -56,6 +60,7 @@ public class PurchaseProductEditor : EditorWindow
         if (GUILayout.Button("Add Product"))
         {
             _products.Add(new ProductJson());
+            _isDirty = true;
         }
 
         if (GUILayout.Button("Save JSON"))
@@ -82,5 +87,13 @@ public class PurchaseProductEditor : EditorWindow
         File.WriteAllText(_filePath, json);
         AssetDatabase.Refresh();
         Debug.Log($"Products saved to {_filePath}");
+        _isDirty = false; 
+    }
+
+    private void OnDestroy()
+    {
+        if (_isDirty)
+            if (EditorUtility.DisplayDialog("Save Changes?", "You have unsaved changes. Do you want to save them?", "Yes", "No"))
+                SaveProducts();
     }
 }

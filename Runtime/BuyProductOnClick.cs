@@ -3,7 +3,7 @@ using UnityEngine;
 using UnityEngine.UI;
 
 [RequireComponent(typeof(Button))]
-public class PurchaseExample : MonoBehaviour
+public class BuyProductOnClick : MonoBehaviour
 {
     private PurchaseManager _purchaseManager;
     private Button _purchaseButton;

@@ -2,6 +2,11 @@ using Playbox.Purchases;
 using UnityEngine;
 using UnityEngine.UI;
 
+/// <summary>
+/// Handles product purchase via a button in Unity UI. Manages the purchase process,
+/// including checking if the product is consumable, handling success/failure, and 
+/// disabling the button while waiting for the result.
+/// </summary>
 [RequireComponent(typeof(Button))]
 public class BuyProductOnClick : MonoBehaviour
 {
@@ -11,10 +16,11 @@ public class BuyProductOnClick : MonoBehaviour
     [SerializeField] private string _productId;
 
     private bool _isWaitingForResult;
-    
     private bool _isNonConsumableProduct;
 
-
+    /// <summary>
+    /// Initializes the button and sets up event listeners for purchase actions.
+    /// </summary>
     private void Awake()
     {
         _purchaseButton = GetComponent<Button>();
@@ -38,6 +44,9 @@ public class BuyProductOnClick : MonoBehaviour
         _purchaseManager.OnPurchaseFailed += HandlePurchaseFailed;
     }
 
+    /// <summary>
+    /// Checks if the non-consumable product has already been purchased and hides the button if it has.
+    /// </summary>
     private void CheckNonConsume()
     {
         if (_purchaseManager.IsAlreadyPurchased(_productId))
@@ -47,6 +56,9 @@ public class BuyProductOnClick : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Unsubscribes from purchase events when the object is destroyed.
+    /// </summary>
     private void OnDestroy()
     {
         if (_purchaseManager != null)
@@ -59,6 +71,9 @@ public class BuyProductOnClick : MonoBehaviour
             _purchaseButton.onClick.RemoveListener(BuyProduct);
     }
 
+    /// <summary>
+    /// Initiates the purchase process for the product. Disables the button while waiting for the result.
+    /// </summary>
     public void BuyProduct()
     {
         if (_purchaseManager == null)
@@ -86,6 +101,9 @@ public class BuyProductOnClick : MonoBehaviour
         _purchaseManager.Purchase(_productId);
     }
 
+    /// <summary>
+    /// Handles a successful purchase by re-enabling the button and hiding it for non-consumable products.
+    /// </summary>
     private void HandlePurchaseSuccess(IProduct product)
     {
         if (product == null || product.Id != _productId)
@@ -100,6 +118,9 @@ public class BuyProductOnClick : MonoBehaviour
             CheckNonConsume();
     }
 
+    /// <summary>
+    /// Handles a failed purchase by re-enabling the button and logging the failure reason.
+    /// </summary>
     private void HandlePurchaseFailed(IProduct product, string reason)
     {
         if (product == null || product.Id != _productId)

@@ -5,6 +5,10 @@ using UnityEngine;
 
 namespace Playbox.Purchases
 {
+    /// <summary>
+    /// Abstract base class for managing in-app purchases. Handles product loading, purchase processing,
+    /// and tracking of consumable and non-consumable products.
+    /// </summary>
     public abstract class PurchaseManager
     {
         protected List<IProduct> _products = new List<IProduct>();
@@ -15,6 +19,9 @@ namespace Playbox.Purchases
 
         private bool _isInitialized = false;
 
+        /// <summary>
+        /// Initializes the purchase manager and loads products from a JSON file.
+        /// </summary>
         public virtual void Initialize()
         {
             if (_isInitialized)
@@ -28,10 +35,19 @@ namespace Playbox.Purchases
             LoadProductsFromJSON();
         }
 
+        /// <summary>
+        /// Gets the list of products.
+        /// </summary>
         public virtual IProduct[] GetProducts() => _products.ToArray();
 
+        /// <summary>
+        /// Abstract method for processing platform-specific purchases.
+        /// </summary>
         protected abstract void ProcessPlatformPurchase(IProduct product);
 
+        /// <summary>
+        /// Initiates a purchase of a product by its ID. Checks if the product is already purchased.
+        /// </summary>
         public void Purchase(string productId)
         {
             var product = _products.Find(p => p.Id == productId);
@@ -50,6 +66,9 @@ namespace Playbox.Purchases
             ProcessPlatformPurchase(product);
         }
 
+        /// <summary>
+        /// Gets the product type (Consumable or Non-Consumable).
+        /// </summary>
         public ProductType GetProductType(string productId)
         {
             var product = _products.Find(p => p.Id == productId);
@@ -60,15 +79,31 @@ namespace Playbox.Purchases
             return ProductType.Consumable;
         }
 
+        /// <summary>
+        /// Event triggered when a purchase is successful.
+        /// </summary>
         public event Action<IProduct> OnPurchaseSuccess;
+
+        /// <summary>
+        /// Event triggered when a purchase fails.
+        /// </summary>
         public event Action<IProduct, string> OnPurchaseFailed;
 
+        /// <summary>
+        /// Triggers the purchase success event.
+        /// </summary>
         protected void TriggerPurchaseSuccess(IProduct product) =>
             OnPurchaseSuccess?.Invoke(product);
 
+        /// <summary>
+        /// Triggers the purchase failure event.
+        /// </summary>
         protected void TriggerPurchaseFailed(IProduct product, string reason) =>
             OnPurchaseFailed?.Invoke(product, reason);
 
+        /// <summary>
+        /// Loads product data from a JSON file in Resources.
+        /// </summary>
         private void LoadProductsFromJSON()
         {
             try
@@ -106,6 +141,9 @@ namespace Playbox.Purchases
             }
         }
 
+        /// <summary>
+        /// Saves a non-consumable product as purchased in PlayerPrefs.
+        /// </summary>
         protected void SaveNonConsumable(string productId)
         {
             var purchases = LoadNonConsumables();
@@ -117,6 +155,9 @@ namespace Playbox.Purchases
             }
         }
 
+        /// <summary>
+        /// Loads the list of previously purchased non-consumable products from PlayerPrefs.
+        /// </summary>
         private List<string> LoadNonConsumables()
         {
             if (!PlayerPrefs.HasKey(NonConsumablesKey))
@@ -125,9 +166,15 @@ namespace Playbox.Purchases
             return JsonConvert.DeserializeObject<List<string>>(PlayerPrefs.GetString(NonConsumablesKey));
         }
 
+        /// <summary>
+        /// Checks if a product has already been purchased.
+        /// </summary>
         public bool IsAlreadyPurchased(string productId) =>
             LoadNonConsumables().Contains(productId);
 
+        /// <summary>
+        /// Checks if a product is purchased (same as IsAlreadyPurchased).
+        /// </summary>
         public bool IsProductPurchased(string productId) =>
             IsAlreadyPurchased(productId);
     }

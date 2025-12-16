@@ -14,13 +14,22 @@ public class PurchaseProductEditor : EditorWindow
     private List<ProductJson> _products = new List<ProductJson>();
     private Vector2 _scrollPos;
 
-    private bool _isDirty = false; 
+    private bool _isDirty = false;
 
+    /// <summary>
+    /// Adds the editor window to the "Playbox" menu in Unity.
+    /// </summary>
     [MenuItem("Playbox/Purchase Products Editor")]
     public static void OpenWindow() => GetWindow<PurchaseProductEditor>("Purchase Products");
 
+    /// <summary>
+    /// Loads products from the JSON file when the editor window is enabled.
+    /// </summary>
     private void OnEnable() => LoadProducts();
 
+    /// <summary>
+    /// Draws the editor window UI, including product list and options to add/remove products.
+    /// </summary>
     private void OnGUI()
     {
         EditorGUILayout.LabelField("Purchase Products Editor", EditorStyles.boldLabel);
@@ -69,6 +78,9 @@ public class PurchaseProductEditor : EditorWindow
         }
     }
 
+    /// <summary>
+    /// Loads products from the JSON file if it exists.
+    /// </summary>
     private void LoadProducts()
     {
         if (!Directory.Exists(FolderPath))
@@ -81,15 +93,21 @@ public class PurchaseProductEditor : EditorWindow
         }
     }
 
+    /// <summary>
+    /// Saves the current list of products to the JSON file.
+    /// </summary>
     private void SaveProducts()
     {
         string json = JsonConvert.SerializeObject(_products, Formatting.Indented);
         File.WriteAllText(_filePath, json);
         AssetDatabase.Refresh();
         Debug.Log($"Products saved to {_filePath}");
-        _isDirty = false; 
+        _isDirty = false;
     }
 
+    /// <summary>
+    /// Prompts the user to save unsaved changes before closing the editor window.
+    /// </summary>
     private void OnDestroy()
     {
         if (_isDirty)

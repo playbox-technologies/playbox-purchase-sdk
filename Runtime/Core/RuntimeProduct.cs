@@ -1,5 +1,8 @@
 namespace Playbox.Purchases
 {
+    /// <summary>
+    /// Represents a product that is created at runtime from a ProductJson definition.
+    /// </summary>
     public class RuntimeProduct : IProduct
     {
         readonly private ProductJson _def;

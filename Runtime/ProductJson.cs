@@ -1,5 +1,8 @@
 namespace Playbox.Purchases
 {
+    /// <summary>
+    /// Represents a product in JSON format for deserialization.
+    /// </summary>
     [System.Serializable]
     public class ProductJson
     {

@@ -20,7 +20,7 @@ public class BuyProductOnClick : MonoBehaviour
         _purchaseButton = GetComponent<Button>();
         _purchaseButton.onClick.AddListener(BuyProduct);
 
-        _purchaseManager = DependencyResolver.GetPurchaseManager();
+        _purchaseManager = PurchaseManagerProvider.GetPurchaseManager();
 
         if (_purchaseManager == null)
         {
@@ -42,8 +42,7 @@ public class BuyProductOnClick : MonoBehaviour
     {
         if (_purchaseManager.IsAlreadyPurchased(_productId))
         {
-            //I put it away for the duration of the tests
-            // _purchaseButton.gameObject.SetActive(false);
+            _purchaseButton.gameObject.SetActive(false);
             return;
         }
     }

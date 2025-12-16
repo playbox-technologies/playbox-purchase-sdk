@@ -1,6 +1,6 @@
 namespace Playbox.Purchases
 {
-    public static class DependencyResolver
+    public static class PurchaseManagerProvider
     {
         private static PurchaseManager _purchaseManager;
 

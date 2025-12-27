@@ -147,20 +147,20 @@ namespace Playbox.Purchases
         /// <summary>
         /// Handles pending orders and confirms the purchase when the product is recognized.
         /// </summary>
-        private void OnPurchasePending(PendingOrder order)
+    private void OnPurchasePending(PendingOrder order)
         {
             var item = order.CartOrdered.Items().FirstOrDefault();
             var id = item?.Product?.definition.id;
-
+            
             Debug.Log($"[IAP] OnPurchasePending: {id}");
 
-            if (id == null)
+            if (id == null)         
             {
                 _storeController.ConfirmPurchase(order);
                 return;
             }
 
-            var product = _products.FirstOrDefault(x => x.Id == id);
+            var product = _products.FirstOrDefault(x => x.Id == id); 
             if (product == null)
             {
                 Debug.LogWarning($"Unknown product: {id}");
@@ -171,17 +171,21 @@ namespace Playbox.Purchases
 #if PLAYBOX_SDK
             var unityProduct = item.Product;
 
+            var receipt = order?.Info?.Receipt;
+            var transactionId = order?.Info?.TransactionID;
+            
             var adapter = new ProductDataAdapter
             {
-                TransactionId = unityProduct.transactionID,
+                TransactionId = transactionId,
                 DefinitionId = unityProduct.definition.id,
                 MetadataLocalizedPrice = unityProduct.metadata.localizedPrice,
                 MetadataIsoCurrencyCode = unityProduct.metadata.isoCurrencyCode,
-                Receipt = unityProduct.receipt
+                Receipt = receipt
             };
 
             Analytics.LogPurchase(adapter, isValid => { });
 #endif
+
 
             if (product.Type == ProductType.NonConsumable)
                 SaveNonConsumable(id);

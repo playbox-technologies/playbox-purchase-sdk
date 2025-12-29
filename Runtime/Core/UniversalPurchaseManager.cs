@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Unity.Services.Core;
@@ -37,7 +38,7 @@ namespace Playbox.Purchases
 
                 await InitializeIapV5Async();
             }
-            catch (System.Exception e)
+            catch (Exception e)
             {
                 Debug.LogError($"[IAP] Failed to initialize UGS/IAP: {e}");
             }
@@ -104,7 +105,6 @@ namespace Playbox.Purchases
         private void OnProductsFetched(List<Product> products)
         {
             Debug.Log($"[IAP] OnProductsFetched: count={products?.Count}");
-
             _storeController.FetchPurchases();
         }
 
@@ -147,20 +147,21 @@ namespace Playbox.Purchases
         /// <summary>
         /// Handles pending orders and confirms the purchase when the product is recognized.
         /// </summary>
-    private void OnPurchasePending(PendingOrder order)
+        private void OnPurchasePending(PendingOrder order)
         {
             var item = order.CartOrdered.Items().FirstOrDefault();
-            var id = item?.Product?.definition.id;
-            
+            var unityProduct = item?.Product;
+            var id = unityProduct?.definition?.id;
+
             Debug.Log($"[IAP] OnPurchasePending: {id}");
 
-            if (id == null)         
+            if (id == null)
             {
                 _storeController.ConfirmPurchase(order);
                 return;
             }
 
-            var product = _products.FirstOrDefault(x => x.Id == id); 
+            var product = _products.FirstOrDefault(x => x.Id == id);
             if (product == null)
             {
                 Debug.LogWarning($"Unknown product: {id}");
@@ -169,11 +170,22 @@ namespace Playbox.Purchases
             }
 
 #if PLAYBOX_SDK
-            var unityProduct = item.Product;
-
             var receipt = order?.Info?.Receipt;
             var transactionId = order?.Info?.TransactionID;
-            
+
+#if UNITY_EDITOR
+            if (string.IsNullOrEmpty(transactionId))
+                transactionId = Guid.NewGuid().ToString("N");
+
+            receipt = BuildUnityLikeFakeReceipt(
+                store: "GooglePlay",
+                productId: unityProduct.definition.id,
+                transactionId: transactionId
+            );
+
+            Debug.Log($"[IAP] Fake receipt FORCED and passed for {unityProduct.definition.id}: {receipt}");
+#endif
+
             var adapter = new ProductDataAdapter
             {
                 TransactionId = transactionId,
@@ -185,7 +197,6 @@ namespace Playbox.Purchases
 
             Analytics.LogPurchase(adapter, isValid => { });
 #endif
-
 
             if (product.Type == ProductType.NonConsumable)
                 SaveNonConsumable(id);
@@ -261,6 +272,25 @@ namespace Playbox.Purchases
 #endif
 
             _storeController.PurchaseProduct(product.Id);
+        }
+
+        private static string BuildUnityLikeFakeReceipt(string store, string productId, string transactionId)
+        {
+            var innerJson =
+                $"{{\\\"orderId\\\":\\\"{transactionId}\\\",\\\"productId\\\":\\\"{productId}\\\",\\\"purchaseTime\\\":\\\"{DateTimeOffset.UtcNow.ToUnixTimeMilliseconds()}\\\"}}";
+
+            var payloadObj =
+                $"{{\"json\":\"{innerJson}\",\"signature\":\"FAKE_SIGNATURE\"}}";
+
+            var receipt =
+                $"{{\"Store\":\"{store}\",\"TransactionID\":\"{transactionId}\",\"Payload\":\"{EscapeForJsonString(payloadObj)}\"}}";
+
+            return receipt;
+        }
+
+        private static string EscapeForJsonString(string s)
+        {
+            return s.Replace("\\", "\\\\").Replace("\"", "\\\"");
         }
     }
 }

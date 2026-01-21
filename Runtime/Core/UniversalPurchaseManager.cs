@@ -15,6 +15,8 @@ namespace Playbox.Purchases
     {
         private StoreController _storeController;
 
+        public StoreController StoreController => _storeController;
+
         /// <summary>
         /// Initializes the purchase manager and connects to Unity IAP services.
         /// </summary>
